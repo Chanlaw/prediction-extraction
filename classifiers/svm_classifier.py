@@ -61,7 +61,7 @@ for i in xrange(1,21):
 	print "Fold %d" % i
 	print "Training Support Vector Machine...\n"
 
-	for c in [ 0.01, 0.03, 0.05, 0.1, 0.3, 0.5, 1, 3, 5, 10]:
+	for c in [ 0.01, 0.03, 0.05, 0.1, 0.3, 0.5, 1, 3, 5, 10, 30, 50, 100]:
 		print "Validating with C=%.2f" %c
 		clf = SVC( tol=1E-6, C=c, kernel=kernel_type)
 		clf = clf.fit(X_train, y_train)
@@ -89,7 +89,7 @@ for i in xrange(1,21):
 	train_accuracy.append(train_acc)
 	test_precision.append(prec)
 	test_recall.append(rec)
-	if (kernel_type == 'linear')
+	if (kernel_type == 'linear'):
 		print "Most informative features:"
 		show_most_informative_features(vectorizer, clf)
 

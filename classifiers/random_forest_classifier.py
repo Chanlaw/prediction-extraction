@@ -42,8 +42,8 @@ test_recall = []
 
 for i in xrange(1,21):
 	#Perform 20-fold cross validation
-	X_train, X_test, y_train, y_test = train_test_split(data_features, data["label"], train_size = 0.9, random_state=14)
-	X_train, X_valid, y_train, y_valid = train_test_split(X_train, y_train, train_size = 0.9)
+	X_train, X_test, y_train, y_test = train_test_split(data_features, data["label"], train_size = 0.9)
+	X_train, X_valid, y_train, y_valid = train_test_split(X_train, y_train, train_size = 0.89)
 
 
 	max_accuracy = 0.0
@@ -52,9 +52,9 @@ for i in xrange(1,21):
 	print "Fold %d" % i
 	print "Training Random Forest...\n"
 
-	for c in xrange(1,21):
+	for c in xrange(1,31):
 		print "Validating with max_depth=%d" % c
-		clf = RandomForestClassifier(n_estimators = 100, max_depth=c)
+		clf = RandomForestClassifier(n_estimators = 10, max_depth=c)
 		clf = clf.fit(X_train, y_train)
 		train_acc = clf.score(X_train, y_train)
 		print "Train Accuracy %.05f" % train_acc
@@ -66,7 +66,7 @@ for i in xrange(1,21):
 
 	print
 	print "Training final Random Forest model with C=%d" %best_C
-	clf = RandomForestClassifier(n_estimators = 100, max_depth =best_C)
+	clf = RandomForestClassifier(n_estimators = 10, max_depth =best_C)
 	clf = clf.fit(X_train, y_train)
 	train_acc = clf.score(X_train, y_train)
 	print "Train Accuracy %.05f" % train_acc
