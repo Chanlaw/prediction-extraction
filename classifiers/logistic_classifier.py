@@ -11,6 +11,14 @@ from sklearn.metrics import precision_recall_fscore_support
 
 data = pd.read_csv("cf_report.tsv", header=0, delimiter="\t", quoting=3)
 
+def show_most_informative_features(vectorizer, clf, n=10):
+	# shows the most informative features n features for a classifier. 
+    feature_names = vectorizer.get_feature_names()
+    coefs_with_fns = sorted(zip(clf.coef_[0], feature_names))
+    top = zip(coefs_with_fns[:n], coefs_with_fns[:-(n + 1):-1])
+    for (coef_1, fn_1), (coef_2, fn_2) in top:
+        print "\t%.4f\t%-15s\t\t%.4f\t%-15s" % (coef_1, fn_1, coef_2, fn_2)
+
 def sentence_to_words( sentence ):
 	# converts a raw sentence to a string of words delimited by spaces, with
 	letters_only = re.sub("[^a-zA-Z\s]", "", sentence)
@@ -30,16 +38,19 @@ for i in xrange( 0, num_sentences):
 print
 print "Creating the bag of words...\n"
 
-vectorizer = CountVectorizer(analyzer = "word",ngram_range = (1,3), max_features = 100000)
+vectorizer = CountVectorizer(analyzer = "word",ngram_range = (1,2), max_features = 10000)
 
 data_features = vectorizer.fit_transform(clean_sentences)
 
 train_accuracy = []
 test_accuracy = []
+test_precision = []
+test_recall = []
+
 for i in xrange(1,21):
 	#Perform 20-fold cross validation
 	X_train, X_test, y_train, y_test = train_test_split(data_features, data["label"], train_size = 0.9)
-	X_train, X_valid, y_train, y_valid = train_test_split(X_train, y_train, train_size = 0.9)
+	X_train, X_valid, y_train, y_valid = train_test_split(X_train, y_train, train_size = 0.89)
 
 	max_accuracy = 0.0
 	best_C = 0.0
@@ -69,10 +80,17 @@ for i in xrange(1,21):
 	print "Valid Accuracy %.05f" % valid_acc
 	test_acc = logistic.score(X_test, y_test)
 	print "Test Accuracy %.05f" % test_acc
-	print precision_recall_fscore_support(logistic.predict(X_test), y_test, average='binary')
+	prec, rec, fscore, support = precision_recall_fscore_support(logistic.predict(X_test), y_test, average='binary')
+	print "Precision %.05f, Recall %.05f" %(prec, rec)
 	test_accuracy.append(test_acc)
 	train_accuracy.append(train_acc)
+	test_precision.append(prec)
+	test_recall.append(rec)
+	print "Most informative features:"
+	show_most_informative_features(vectorizer, logistic)
 print "-"
 print "Number of features %d" %len(vectorizer.get_feature_names())
 print "Average train accuracy %.05f" %(sum(train_accuracy)/len(train_accuracy))
 print "Average test accuracy %.05f" %(sum(test_accuracy)/len(test_accuracy))
+print "Average precision %.05f" %(sum(test_precision)/len(test_precision))
+print "Average recall %.05f" %(sum(test_recall)/len(test_precision))

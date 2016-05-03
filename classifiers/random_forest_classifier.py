@@ -10,7 +10,6 @@ from sklearn.metrics import precision_recall_fscore_support
 
 data = pd.read_csv("cf_report.tsv", header=0, delimiter="\t", quoting=3)
 
-
 def sentence_to_words( sentence ):
 	# converts a raw sentence to a string of words delimited by spaces, with
 
@@ -36,8 +35,11 @@ vectorizer = CountVectorizer(analyzer = "word",ngram_range = (1,1), max_features
 data_features = vectorizer.fit_transform(clean_sentences)
 data_features = data_features.toarray()
 
+train_accuracy = []
+test_accuracy = []
+test_precision = []
+test_recall = []
 
-accuracy = []
 for i in xrange(1,21):
 	#Perform 20-fold cross validation
 	X_train, X_test, y_train, y_test = train_test_split(data_features, data["label"], train_size = 0.9, random_state=14)
@@ -72,7 +74,15 @@ for i in xrange(1,21):
 	print "Valid Accuracy %.05f" % valid_acc
 	test_acc = clf.score(X_test, y_test)
 	print "Test Accuracy %.05f" % test_acc
-	print precision_recall_fscore_support(clf.predict(X_test), y_test, average='binary')
-	accuracy.append(test_acc)
+	prec, rec, fscore, support = precision_recall_fscore_support(clf.predict(X_test), y_test, average='binary')
+	print "Precision %.05f, Recall %.05f" %(prec, rec)
+	test_accuracy.append(test_acc)
+	train_accuracy.append(train_acc)
+	test_precision.append(prec)
+	test_recall.append(rec)
 print "-"
-print "Average accuracy %.05f" %(sum(accuracy)/len(accuracy))
+print "Number of features %d" %len(vectorizer.get_feature_names())
+print "Average train accuracy %.05f" %(sum(train_accuracy)/len(train_accuracy))
+print "Average test accuracy %.05f" %(sum(test_accuracy)/len(test_accuracy))
+print "Average precision %.05f" %(sum(test_precision)/len(test_precision))
+print "Average recall %.05f" %(sum(test_recall)/len(test_precision))
