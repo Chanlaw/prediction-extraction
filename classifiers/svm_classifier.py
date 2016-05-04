@@ -83,7 +83,7 @@ for i in xrange(1,21):
 	print "Valid Accuracy %.05f" % valid_acc
 	test_acc = clf.score(X_test, y_test)
 	print "Test Accuracy %.05f" % test_acc
-	prec, rec, fscore, support = precision_recall_fscore_support(clf.predict(X_test), y_test, average='binary')
+	prec, rec, fscore, support = precision_recall_fscore_support( y_test, clf.predict(X_test), average='binary')
 	print "Precision %.05f, Recall %.05f" %(prec, rec)
 	test_accuracy.append(test_acc)
 	train_accuracy.append(train_acc)
