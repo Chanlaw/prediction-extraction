@@ -38,7 +38,7 @@ for i in xrange( 0, num_sentences):
 print
 print "Creating the bag of words...\n"
 
-vectorizer = CountVectorizer(analyzer = "word",ngram_range = (1,3), max_features = 50000)
+vectorizer = CountVectorizer(analyzer = "word",ngram_range = (1,1), max_features = 1000)
 
 data_features = vectorizer.fit_transform(clean_sentences)
 
@@ -84,7 +84,8 @@ for i in xrange(1,21):
 	print "Precision %.05f, Recall %.05f" %(prec, rec)
 	test_accuracy.append(test_acc)
 	train_accuracy.append(train_acc)
-	test_precision.append(prec)
+	if (prec > 0):
+		test_precision.append(prec)
 	test_recall.append(rec)
 	print "Most informative features:"
 	show_most_informative_features(vectorizer, logistic)

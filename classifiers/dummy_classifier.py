@@ -65,12 +65,11 @@ for i in xrange(1,21):
 	print "Precision %.05f, Recall %.05f" %(prec, rec)
 	test_accuracy.append(test_acc)
 	train_accuracy.append(train_acc)
-	test_precision.append(prec)
 	test_recall.append(rec)
 
 print "-"
 print "Number of features %d" %len(vectorizer.get_feature_names())
 print "Average train accuracy %.05f" %(sum(train_accuracy)/len(train_accuracy))
 print "Average test accuracy %.05f" %(sum(test_accuracy)/len(test_accuracy))
-print "Average precision %.05f" %(sum(test_precision)/len(test_precision))
+# No precision score calculated since majority class = not prediction, and so precision isn't defined
 print "Average recall %.05f" %(sum(test_recall)/len(test_precision))

@@ -78,7 +78,8 @@ for i in xrange(1,21):
 	print "Precision %.05f, Recall %.05f" %(prec, rec)
 	test_accuracy.append(test_acc)
 	train_accuracy.append(train_acc)
-	test_precision.append(prec)
+	if (prec > 0):
+		test_precision.append(prec)
 	test_recall.append(rec)
 print "-"
 print "Number of features %d" %len(vectorizer.get_feature_names())

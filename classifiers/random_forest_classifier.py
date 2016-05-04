@@ -54,7 +54,7 @@ for i in xrange(1,21):
 
 	for c in xrange(1,31):
 		print "Validating with max_depth=%d" % c
-		clf = RandomForestClassifier(n_estimators = 10, max_depth=c)
+		clf = RandomForestClassifier(n_estimators = 100, max_depth=c)
 		clf = clf.fit(X_train, y_train)
 		train_acc = clf.score(X_train, y_train)
 		print "Train Accuracy %.05f" % train_acc
@@ -66,7 +66,7 @@ for i in xrange(1,21):
 
 	print
 	print "Training final Random Forest model with C=%d" %best_C
-	clf = RandomForestClassifier(n_estimators = 10, max_depth =best_C)
+	clf = RandomForestClassifier(n_estimators = 100, max_depth =best_C)
 	clf = clf.fit(X_train, y_train)
 	train_acc = clf.score(X_train, y_train)
 	print "Train Accuracy %.05f" % train_acc
@@ -78,7 +78,8 @@ for i in xrange(1,21):
 	print "Precision %.05f, Recall %.05f" %(prec, rec)
 	test_accuracy.append(test_acc)
 	train_accuracy.append(train_acc)
-	test_precision.append(prec)
+	if (prec > 0):
+		test_precision.append(prec)
 	test_recall.append(rec)
 print "-"
 print "Number of features %d" %len(vectorizer.get_feature_names())
