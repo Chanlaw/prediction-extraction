@@ -38,7 +38,7 @@ for i in xrange( 0, num_sentences):
 print
 print "Creating the bag of words...\n"
 
-vectorizer = CountVectorizer(analyzer = "word",ngram_range = (1,3), max_features = 50000)
+vectorizer = CountVectorizer(analyzer = "word",ngram_range = (1,1), max_features = 1000)
 
 data_features = vectorizer.fit_transform(clean_sentences)
 
