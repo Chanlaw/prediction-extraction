@@ -1,5 +1,5 @@
 # prediction-extraction
-Tools for automatically identifying and extracting predictions from op-eds
+This was the code I wrote for an independent study project I did in the CIS department (CIS 099). 
 
 ## Webscraping 
 First, navigate to the location of web_crawler on your computer. 
