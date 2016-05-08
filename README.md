@@ -1,8 +1,8 @@
 # prediction-extraction
-This was the code I wrote for an independent study project I did in the CIS department (CIS 099). 
+This was the code I wrote for an independent study project I did in the CIS department (CIS 099). The writeup for the project is `automated-identification-extraction.pdf`. 
 
 ## Webscraping 
-First, navigate to the location of web_crawler on your computer. 
+First, navigate to the location of `web_crawler` on your computer. 
 ```
 cd location/on/your/computer/prediction-extraction/web_crawler
 ```
