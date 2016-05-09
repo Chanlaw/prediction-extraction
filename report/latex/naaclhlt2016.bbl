@@ -1,0 +1,48 @@
+\begin{thebibliography}{}
+
+\bibitem[\protect\citename{Hastie \bgroup et al.\egroup }2013]{Hastie:13}
+Trevor Hastie, Robert Tibshirani, and Jerome Friedman.
+\newblock 2013.
+\newblock {\em The Elements of Statistical Learning: Data Mining, Inference,
+  and Prediction}.
+\newblock Springer, 10 edition.
+
+\bibitem[\protect\citename{Hearst}1992]{Hearst:92}
+Marti~A. Hearst.
+\newblock 1992.
+\newblock Automatic acquisition of hyponyms from large text corpora.
+\newblock In {\em Proceedings of COLING 1992}, pages 23--28, Nantes, France.
+  Association for Computational Linguistics.
+
+\bibitem[\protect\citename{Le and Mikolov}2014]{Le:14}
+Quoc Le and Tomas Mikolov.
+\newblock 2014.
+\newblock Distributed representations of sentences and documents.
+\newblock Beijing, China.
+
+\bibitem[\protect\citename{Snow \bgroup et al.\egroup }2004]{Snow:04}
+Rion Snow, Daniel Jurafsky, and Andrew~Y. Ng.
+\newblock 2004.
+\newblock Learning syntactic patterns for automatic hypernym discovery.
+\newblock Vancouver, Canada.
+
+\bibitem[\protect\citename{Tetlock and Gardner}2015]{Tetlock:15}
+Philip~E. Tetlock and Dan Gardner.
+\newblock 2015.
+\newblock {\em Superforecasting: The Art and Science of Prediction}.
+\newblock Crown Publishers.
+
+\bibitem[\protect\citename{Tetlock}2005]{Tetlock:05}
+Philip~E. Tetlock.
+\newblock 2005.
+\newblock {\em Expert Political Judgment: How Good is It? How Can we Know?}
+\newblock Princeton University Press, Princeton, NJ.
+
+\bibitem[\protect\citename{Tetlock}2016]{Tetlock:16}
+Philip~E. Tetlock.
+\newblock 2016.
+\newblock Revolutionizing the assessment of alpha pundits: the superforecaster
+  challenge.
+\newblock Proposal, Wharton School, University of Pennsylvania.
+
+\end{thebibliography}
