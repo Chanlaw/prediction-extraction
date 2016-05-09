@@ -1,5 +1,5 @@
 # prediction-extraction
-This was the code I wrote for an independent study project I did in the CIS department (CIS 099). The writeup for the project is `automated-identification-extraction.pdf`. 
+This was the code I wrote for an independent study project I did in the CIS department (CIS 099). The writeup for the project is `automated-identification-extraction.pdf`, located in the `report` subdirectory. 
 
 ## Webscraping 
 First, navigate to the location of `web_crawler` on your computer. 
@@ -18,7 +18,7 @@ cat krugman_articles.txt | python sentence_parser.py > krugman_sentences.tsv
 The reason we use `.tsv` is because Crowdflower does not support using `.txt` files for uploading data.
 
 ## Machine Learning Classifier
-To train a classifier, simply run the file in python. For example, to train a logistic regression classifier, simply run:
+To train a classifier, simply run the corresponding file, located in the `classifiers` subdirectory in python. For example, to train a logistic regression classifier, simply run:
 ```
 python logistic_classifier.py
 ```
