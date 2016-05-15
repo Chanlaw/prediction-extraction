@@ -9,6 +9,9 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import precision_recall_fscore_support
 
+
+# Logistic regression classifier
+
 data = pd.read_csv("cf_report.tsv", header=0, delimiter="\t", quoting=3)
 
 def show_most_informative_features(vectorizer, clf, n=10):

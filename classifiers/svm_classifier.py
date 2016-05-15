@@ -8,6 +8,8 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.svm import SVC
 from sklearn.metrics import precision_recall_fscore_support
 
+# Support Vector Machine Classifier
+
 data = pd.read_csv("cf_report.tsv", header=0, delimiter="\t", quoting=3)
 
 def show_most_informative_features(vectorizer, clf, n=10):

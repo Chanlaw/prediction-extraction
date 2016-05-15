@@ -6,7 +6,10 @@ from nltk.corpus import stopwords
 from sklearn.cross_validation import train_test_split
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import precision_recall_fscore_support
+
+# Random forest classifier
 
 data = pd.read_csv("cf_report.tsv", header=0, delimiter="\t", quoting=3)
 
@@ -52,9 +55,9 @@ for i in xrange(1,21):
 	print "Fold %d" % i
 	print "Training Random Forest...\n"
 
-	for c in xrange(1,31):
+	for c in xrange(1,11):
 		print "Validating with max_depth=%d" % c
-		clf = RandomForestClassifier(n_estimators = 100, max_depth=c)
+		clf = RandomForestClassifier(n_estimators = 1000, max_depth=c)
 		clf = clf.fit(X_train, y_train)
 		train_acc = clf.score(X_train, y_train)
 		print "Train Accuracy %.05f" % train_acc
@@ -66,7 +69,7 @@ for i in xrange(1,21):
 
 	print
 	print "Training final Random Forest model with C=%d" %best_C
-	clf = RandomForestClassifier(n_estimators = 100, max_depth =best_C)
+	clf = RandomForestClassifier(n_estimators = 1000, max_depth =best_C)
 	clf = clf.fit(X_train, y_train)
 	train_acc = clf.score(X_train, y_train)
 	print "Train Accuracy %.05f" % train_acc

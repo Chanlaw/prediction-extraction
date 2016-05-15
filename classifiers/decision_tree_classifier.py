@@ -5,10 +5,12 @@ import nltk
 from nltk.corpus import stopwords
 from sklearn.cross_validation import train_test_split
 from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.naive_bayes import MultinomialNB
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.tree import export_graphviz
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import precision_recall_fscore_support
 
-# Naive bayes classifier
+# Random forest classifier
 
 data = pd.read_csv("cf_report.tsv", header=0, delimiter="\t", quoting=3)
 
@@ -32,11 +34,11 @@ for i in xrange( 0, num_sentences):
 print
 print "Creating the bag of words...\n"
 
-vectorizer = CountVectorizer(analyzer = "word",ngram_range = (1,3), max_features = 50000)
+vectorizer = CountVectorizer(analyzer = "word",ngram_range = (1,1), max_features = 1000)
 
 data_features = vectorizer.fit_transform(clean_sentences)
 data_features = data_features.toarray()
-
+print vectorizer.get_feature_names()[967]
 train_accuracy = []
 test_accuracy = []
 test_precision = []
@@ -47,42 +49,43 @@ for i in xrange(1,21):
 	X_train, X_test, y_train, y_test = train_test_split(data_features, data["label"], train_size = 0.9)
 	X_train, X_valid, y_train, y_valid = train_test_split(X_train, y_train, train_size = 0.89)
 
-	max_accuracy = 0.0
-	best_C = 0.1
 
+	max_accuracy = 0.0
+	best_C = 0.01
 	print "\n-"
 	print "Fold %d" % i
-	print "Training Naive Bayes Classifier...\n"
+	print "Training Decision Tree...\n"
 
-	for c in [0.1, 0.3, 0.5, 1, 3, 5, 10, 30, 50, 100]:
-		print "Validating with alpha=%.2f" % c
-		bayes = MultinomialNB( alpha = c)
-		bayes = bayes.fit(X_train, y_train)
-		train_acc = bayes.score(X_train, y_train)
+	for c in xrange(1,31):
+		print "Validating with max_depth=%d" % c
+		clf = DecisionTreeClassifier( max_depth=c)
+		clf = clf.fit(X_train, y_train)
+		train_acc = clf.score(X_train, y_train)
 		print "Train Accuracy %.05f" % train_acc
-		valid_acc = bayes.score(X_valid, y_valid)
+		valid_acc = clf.score(X_valid, y_valid)
 		print "Validation Accuracy %.05f" % valid_acc
 		if ( valid_acc > max_accuracy ):
 			best_C = c
 			max_accuracy = valid_acc
 
 	print
-	print "Training final naive model with alpha =%.2f" %best_C
-	bayes = MultinomialNB( alpha=best_C)
-	bayes = bayes.fit(X_train, y_train)
-	train_acc = bayes.score(X_train, y_train)
+	print "Training final Decision Tree with max_depth=%d" %best_C
+	clf = DecisionTreeClassifier( max_depth =best_C)
+	clf = clf.fit(X_train, y_train)
+	train_acc = clf.score(X_train, y_train)
 	print "Train Accuracy %.05f" % train_acc
-	valid_acc = bayes.score(X_valid, y_valid)
+	valid_acc = clf.score(X_valid, y_valid)
 	print "Valid Accuracy %.05f" % valid_acc
-	test_acc = bayes.score(X_test, y_test)
+	test_acc = clf.score(X_test, y_test)
 	print "Test Accuracy %.05f" % test_acc
-	prec, rec, fscore, support = precision_recall_fscore_support( y_test, bayes.predict(X_test), average='binary')
+	prec, rec, fscore, support = precision_recall_fscore_support( y_test, clf.predict(X_test), average='binary')
 	print "Precision %.05f, Recall %.05f" %(prec, rec)
 	test_accuracy.append(test_acc)
 	train_accuracy.append(train_acc)
 	if (prec > 0):
 		test_precision.append(prec)
 	test_recall.append(rec)
+
 print "-"
 print "Number of features %d" %len(vectorizer.get_feature_names())
 print "Average train accuracy %.05f" %(sum(train_accuracy)/len(train_accuracy))
