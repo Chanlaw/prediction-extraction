@@ -13,10 +13,12 @@ from sklearn.tree import DecisionTreeClassifier
 
 # Trains an AdaBoost classifier using decision trees, naive Bayes, or LogisticRegression
 
-decisionTree = DecisionTreeClassifier
+decisionTree = DecisionTreeClassifier(max_depth=3)
 naiveBayes = MultinomialNB
+logisticReg = LogisticRegression
 
-weak_learner = 
+#Set this to the type of estimator you'd like to use
+weak_learner = DecisionTreeClassifier
 
 data = pd.read_csv("cf_report.tsv", header=0, delimiter="\t", quoting=3)
 
@@ -44,7 +46,7 @@ vectorizer = CountVectorizer(analyzer = "word",ngram_range = (1,1), max_features
 
 data_features = vectorizer.fit_transform(clean_sentences)
 data_features = data_features.toarray()
-
+ 
 train_accuracy = []
 test_accuracy = []
 test_precision = []
@@ -53,35 +55,18 @@ test_recall = []
 for i in xrange(1,21):
 	#Perform 20-fold cross validation
 	X_train, X_test, y_train, y_test = train_test_split(data_features, data["label"], train_size = 0.9)
-	X_train, X_valid, y_train, y_valid = train_test_split(X_train, y_train, train_size = 0.89)
 
 
 	max_accuracy = 0.0
 	best_C = 0.01
 	print "\n-"
 	print "Fold %d" % i
-	print "Training Random Forest...\n"
+	print "Training AdaBoost Classifier...\n"
 
-	for c in xrange(1,31):
-		print "Validating with max_depth=%d" % c
-		clf = RandomForestClassifier(n_estimators = 100, max_depth=c)
-		clf = clf.fit(X_train, y_train)
-		train_acc = clf.score(X_train, y_train)
-		print "Train Accuracy %.05f" % train_acc
-		valid_acc = clf.score(X_valid, y_valid)
-		print "Validation Accuracy %.05f" % valid_acc
-		if ( valid_acc > max_accuracy ):
-			best_C = c
-			max_accuracy = valid_acc
-
-	print
-	print "Training final Random Forest model with C=%d" %best_C
-	clf = RandomForestClassifier(n_estimators = 100, max_depth =best_C)
+	clf = AdaBoostClassifier(DecisionTreeClassifier(max_depth=30), n_estimators=200)
 	clf = clf.fit(X_train, y_train)
 	train_acc = clf.score(X_train, y_train)
 	print "Train Accuracy %.05f" % train_acc
-	valid_acc = clf.score(X_valid, y_valid)
-	print "Valid Accuracy %.05f" % valid_acc
 	test_acc = clf.score(X_test, y_test)
 	print "Test Accuracy %.05f" % test_acc
 	prec, rec, fscore, support = precision_recall_fscore_support( y_test, clf.predict(X_test), average='binary')
