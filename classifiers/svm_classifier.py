@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import nltk
 from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
 from sklearn.cross_validation import train_test_split
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.svm import SVC
@@ -10,7 +11,7 @@ from sklearn.metrics import precision_recall_fscore_support
 
 # Support Vector Machine Classifier
 
-data = pd.read_csv("cf_report.tsv", header=0, delimiter="\t", quoting=3)
+data = pd.read_csv("cf_report3.txt", header=0, delimiter="\t", quoting=3)
 
 def show_most_informative_features(vectorizer, clf, n=10):
 	# shows the most informative features n features for a classifier. 
@@ -21,10 +22,9 @@ def show_most_informative_features(vectorizer, clf, n=10):
         print "\t%.4f\t%-15s\t\t%.4f\t%-15s" % (coef_1, fn_1, coef_2, fn_2)
 
 def sentence_to_words( sentence ):
-	# converts a raw sentence to a string of words delimited by spaces, with
-
-	letters_only = re.sub("[^a-zA-Z\s]", "", sentence)
-	words = letters_only.lower().split()
+	# tokenizes sentence using the given tokenizer
+	sentence=sentence.decode('utf-8')
+	words = word_tokenize(sentence)
 	return( " ".join( words ))
 
 num_sentences = data["sentence"].size
@@ -50,12 +50,13 @@ test_accuracy = []
 test_precision = []
 test_recall = []
 
+kernel_type = 'rbf'
+
 for i in xrange(1,21):
 	#Perform 20-fold cross validation
 	X_train, X_test, y_train, y_test = train_test_split(data_features, data["label"], train_size = 0.9)
-	X_train, X_valid, y_train, y_valid = train_test_split(X_train, y_train, train_size = 0.89)
+	X_train, X_valid, y_train, y_valid = train_test_split(X_train, y_train, train_size = 0.8889)
 
-	kernel_type = 'rbf'
 	max_accuracy = 0.0
 	best_C = 0.01
 
@@ -63,9 +64,9 @@ for i in xrange(1,21):
 	print "Fold %d" % i
 	print "Training Support Vector Machine...\n"
 
-	for c in [ 0.01, 0.03, 0.05, 0.1, 0.3, 0.5, 1, 3, 5, 10, 30, 50, 100]:
+	for c in [ 0.1, 0.3, 0.5, 1, 3, 5, 10, 30, 50, 100, 300]:
 		print "Validating with C=%.2f" %c
-		clf = SVC( tol=1E-6, C=c, kernel=kernel_type)
+		clf = SVC( tol=1E-6, C=c, kernel=kernel_type, n_jobs=-1)
 		clf = clf.fit(X_train, y_train)
 		train_acc = clf.score(X_train, y_train)
 		print "Train Accuracy %.05f" % train_acc
@@ -77,7 +78,7 @@ for i in xrange(1,21):
 
 	print
 	print "Training final Support Vector Machine model with C=%.2f" %best_C
-	clf = SVC( tol=1E-6, C=best_C, kernel = kernel_type)
+	clf = SVC( tol=1E-6, C=best_C, kernel = kernel_type, n_jobs=-1)
 	clf = clf.fit(X_train, y_train)
 	train_acc = clf.score(X_train, y_train)
 	print "Train Accuracy %.05f" % train_acc

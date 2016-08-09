@@ -17,7 +17,7 @@ def get_text(url) :
 
 for url in sys.stdin : 
   url = url.strip()
-
+  sys.stderr.write("Getting text from %s\n"%url)
   try: 
     txt = get_text(url)
   except :

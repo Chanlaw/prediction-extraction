@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import nltk
 from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
 from sklearn.cross_validation import train_test_split
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.ensemble import RandomForestClassifier
@@ -12,14 +13,14 @@ from sklearn.metrics import precision_recall_fscore_support
 
 # Random forest classifier
 
-data = pd.read_csv("cf_report.tsv", header=0, delimiter="\t", quoting=3)
+data = pd.read_csv("cf_report3.txt", header=0, delimiter="\t")
 
 def sentence_to_words( sentence ):
-	# converts a raw sentence to a string of words delimited by spaces, with
-
-	letters_only = re.sub("[^a-zA-Z\s]", "", sentence)
-	words = letters_only.lower().split()
+	# tokenizes sentence using the given tokenizer
+	sentence=sentence.decode('iso-8859-1')
+	words = word_tokenize(sentence)
 	return( " ".join( words ))
+
 
 num_sentences = data["sentence"].size
 clean_sentences = []
@@ -38,13 +39,12 @@ vectorizer = CountVectorizer(analyzer = "word",ngram_range = (1,1), max_features
 
 data_features = vectorizer.fit_transform(clean_sentences)
 data_features = data_features.toarray()
-print vectorizer.get_feature_names()[967]
 train_accuracy = []
 test_accuracy = []
 test_precision = []
 test_recall = []
 
-for i in xrange(1,21):
+for i in xrange(1,101):
 	#Perform 20-fold cross validation
 	X_train, X_test, y_train, y_test = train_test_split(data_features, data["label"], train_size = 0.9)
 	X_train, X_valid, y_train, y_valid = train_test_split(X_train, y_train, train_size = 0.89)
@@ -56,7 +56,7 @@ for i in xrange(1,21):
 	print "Fold %d" % i
 	print "Training Decision Tree...\n"
 
-	for c in xrange(1,31):
+	for c in xrange(1,2):
 		print "Validating with max_depth=%d" % c
 		clf = DecisionTreeClassifier( max_depth=c)
 		clf = clf.fit(X_train, y_train)

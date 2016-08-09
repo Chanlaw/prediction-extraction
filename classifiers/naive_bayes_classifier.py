@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import nltk
 from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
 from sklearn.cross_validation import train_test_split
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
@@ -10,13 +11,12 @@ from sklearn.metrics import precision_recall_fscore_support
 
 # Naive bayes classifier
 
-data = pd.read_csv("cf_report.tsv", header=0, delimiter="\t", quoting=3)
+data = pd.read_csv("cf_report3.txt", header=0, delimiter="\t")
 
 def sentence_to_words( sentence ):
-	# converts a raw sentence to a string of words delimited by spaces, with
-
-	letters_only = re.sub("[^a-zA-Z\s]", "", sentence)
-	words = letters_only.lower().split()
+	# tokenizes sentence using the given tokenizer
+	sentence=sentence.decode('utf-8')
+	words = word_tokenize(sentence)
 	return( " ".join( words ))
 
 num_sentences = data["sentence"].size
@@ -32,7 +32,7 @@ for i in xrange( 0, num_sentences):
 print
 print "Creating the bag of words...\n"
 
-vectorizer = CountVectorizer(analyzer = "word",ngram_range = (1,3), max_features = 50000)
+vectorizer = CountVectorizer(analyzer = "word",ngram_range = (1,2), max_features = 10000)
 
 data_features = vectorizer.fit_transform(clean_sentences)
 data_features = data_features.toarray()

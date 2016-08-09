@@ -10,7 +10,7 @@ from sklearn.metrics import precision_recall_fscore_support
 
 # Dummy classifier to serve as benchmark for other classifiers. 
 
-data = pd.read_csv("cf_report.tsv", header=0, delimiter="\t", quoting=3)
+data = pd.read_csv("cf_report3.txt", header=0, delimiter="\t")
 
 def sentence_to_words( sentence ):
 	# converts a raw sentence to a string of words delimited by spaces, with
@@ -31,7 +31,7 @@ for i in xrange( 0, num_sentences):
 print
 print "Creating the bag of words...\n"
 
-vectorizer = CountVectorizer(analyzer = "word",ngram_range = (1,3), max_features = 50000)
+vectorizer = CountVectorizer(analyzer = "word",ngram_range = (1,1), max_features = 1000)
 
 data_features = vectorizer.fit_transform(clean_sentences)
 data_features = data_features.toarray()
@@ -44,7 +44,7 @@ test_recall = []
 for i in xrange(1,21):
 	#Perform 20-fold cross validation
 	X_train, X_test, y_train, y_test = train_test_split(data_features, data["label"], train_size = 0.9)
-	X_train, X_valid, y_train, y_valid = train_test_split(X_train, y_train, train_size = 0.89)
+	X_train, X_valid, y_train, y_valid = train_test_split(X_train, y_train, train_size = 0.8889)
 
 	max_accuracy = 0.0
 	best_C = 0.1

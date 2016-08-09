@@ -10,8 +10,7 @@ import re
 #Only get links from Paul Krugman's blog
 DOMAIN = 'http://krugman.blogs.nytimes.com/' 
 
-def crawl(root_url, domain=''):
-  visited = set()
+def crawl(root_url, visited, domain=''):
   stack = [root_url]
   cj = CookieJar()
   url = root_url
@@ -25,7 +24,7 @@ def crawl(root_url, domain=''):
   doc = lxml.etree.HTML(site) 
 
   #Use regex to get links from page
-  result = doc.xpath("//div//p") 
+  result = doc.xpath("//a") 
   link = re.compile('href="(.*?)"') 
 
   #Print all links not visited
@@ -33,11 +32,12 @@ def crawl(root_url, domain=''):
       source = lxml.html.tostring(item)
       if link.search(source): 
         link_address = link.search(source).group(1) 
-        if link_address.startswith(DOMAIN) and link_address not in visited: 
+        if link_address.startswith(DOMAIN) and '?' not in link_address and link_address not in visited: 
             print link_address 
             visited.add(link_address)
 
 if __name__ == "__main__":
-   for i in range(1,56): 
-     crawl('http://krugman.blogs.nytimes.com/page/%s'%i, domain=DOMAIN)
+   for i in range(1,6): 
+    visited = set()
+    crawl('http://krugman.blogs.nytimes.com/page/%s'%i, visited, domain=DOMAIN)
 
