@@ -1,5 +1,5 @@
 # prediction-extraction
-This was the code I wrote for an independent study project I did in the CIS department (CIS 099). The writeup for the project is `automated-identification-extraction.pdf`, located in the `report` subdirectory. 
+This was the code I wrote for an independent study project I did in the CIS department (CIS 099). The writeup for the project is [`automated-identification-extraction.pdf`](https://github.com/Chanlaw/prediction-extraction/blob/master/report/automated-identification-extraction.pdf). 
 
 ## Webscraping 
 First, navigate to the location of `web_crawler` on your computer. 
